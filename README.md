@@ -112,7 +112,7 @@ Ce script :
 
 ---
 
-✅ **Avantages**
+**Avantages**
 
 * Versioning automatisé
 * Historique propre dans `CARNET_BORD.md`
