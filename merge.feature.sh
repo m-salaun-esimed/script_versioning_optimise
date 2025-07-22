@@ -31,7 +31,6 @@ fi
 branch_to_merge=${branches[$((choice-1))]}
 echo "Branche sélectionnée : $branch_to_merge"
 
-# ✅ 9. Si des modifs non commitées, proposer stash auto
 if [[ -n "$(git status --porcelain)" ]]; then
   echo -e "\n⚠️ La branche locale contient des modifications non commit."
   read -rp "Voulez-vous les stasher automatiquement ? (o/n) : " stash_choice
@@ -68,7 +67,6 @@ if [ "$LOCAL" != "$REMOTE" ]; then
   fi
 fi
 
-# Choix du type de version
 echo -ne "\nType de version ? (v=major, f=feature/minor, p=patch) : "
 read -r version_type
 
@@ -112,7 +110,6 @@ read -r msg_merge
 echo -ne "Message complémentaire : "
 read -r msg_compl
 
-# ✅ 11. Confirmation avant merge
 echo -e "\nRésumé avant merge :"
 echo "  • Branche        : $branch_to_merge"
 echo "  • Nouvelle version : v$new_version"
@@ -135,20 +132,17 @@ git add "$CARNET"
 git commit -m "Maj carnet de bord v$new_version"
 git push origin develop
 
-# ✅ 12. Proposer suppression branche feature
 read -rp "Voulez-vous supprimer la branche feature/$branch_to_merge après merge ? (o/n) : " del_choice
 if [[ "$del_choice" =~ ^[oOyY]$ ]]; then
   git push origin --delete "$branch_to_merge"
   echo "✅ Branche distante $branch_to_merge supprimée."
 fi
 
-# ✅ 13. Résumé final
 echo -e "\n🎉 Merge terminé avec succès !"
 echo "📌 Version : v$new_version"
 echo "📌 Branche mergée : $branch_to_merge"
 [ "$del_choice" = "o" ] && echo "📌 Branche supprimée après merge."
 
-# ✅ Si stash avait été fait, proposer pop
 if git stash list | grep -q "stash auto avant merge $branch_to_merge"; then
   read -rp "Voulez-vous réappliquer vos changements stashed ? (o/n) : " pop_choice
   if [[ "$pop_choice" =~ ^[oOyY]$ ]]; then
