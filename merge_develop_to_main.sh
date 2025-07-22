@@ -68,11 +68,9 @@ git checkout main
 echo "Merge develop dans main..."
 git merge --no-ff origin/develop -m "Release v$new_version"
 
-# ✅ Si la version choisie est différente, on met à jour le CARNET_BORD.md
 if [ "$new_version" != "$last_version" ]; then
   echo "Ajout d’une ligne spécifique pour la version $new_version dans $CARNET..."
 
-  # On demande un petit message complémentaire pour le carnet
   echo -n "Message complémentaire pour la release main : "
   read msg_compl
 
@@ -83,10 +81,8 @@ if [ "$new_version" != "$last_version" ]; then
   git commit -m "Maj carnet de bord pour release v$new_version"
 fi
 
-# Push sur main
 git push origin main
 
-# Tag de la release
 git tag -a "v$new_version" -m "Tag version $new_version"
 git push origin "v$new_version"
 
