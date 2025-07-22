@@ -74,12 +74,16 @@ if [ "$new_version" != "$last_version" ]; then
   git commit -m "📖 Maj carnet de bord pour release v$new_version"
 fi
 
-echo "📌 Push main + tag..."
+echo "Push main + tag..."
 git push origin main
 git tag -a "v$new_version" -m "Tag version $new_version"
 git push origin "v$new_version"
 
-echo "📌 Mise à jour de develop avec les dernières modifs de main..."
+echo "Synchronisation develop avec la dernière version de main..."
+git checkout main
+git pull origin main
+
+echo "Mise à jour de develop avec les dernières modifs de main..."
 git checkout develop
 git pull origin develop
 git merge --no-ff main -m "Sync main (v$new_version) vers develop"
