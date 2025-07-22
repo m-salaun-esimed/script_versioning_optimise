@@ -1,3 +1,4 @@
 - 0.1.0 - feature/test - test - test
 - 0.2.0 - feature/test2 - test2 - test2
 - 0.3.0 - feature/test3 - test3 - test3
+- 0.4.0 - feature/test4 - test - test
