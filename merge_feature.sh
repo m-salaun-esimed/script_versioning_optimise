@@ -32,7 +32,7 @@ branch_to_merge=${branches[$((choice-1))]}
 echo "Branche sélectionnée : $branch_to_merge"
 
 if [[ -n "$(git status --porcelain)" ]]; then
-  echo -e "\n⚠️ La branche locale contient des modifications non commit."
+  echo -e "\nLa branche locale contient des modifications non commit."
   read -rp "Voulez-vous les stasher automatiquement ? (o/n) : " stash_choice
   if [[ "$stash_choice" =~ ^[oOyY]$ ]]; then
     git stash push -m "stash auto avant merge $branch_to_merge"
@@ -54,15 +54,15 @@ if [ -z "$LOCAL" ]; then
 fi
 
 if [ "$LOCAL" != "$REMOTE" ]; then
-  echo -e "\n⚠️ La branche $branch_to_merge n’est pas synchronisée avec origin."
+  echo -e "\nLa branche $branch_to_merge n’est pas synchronisée avec origin."
   read -rp "Voulez-vous faire un pull automatique ? (o/n) : " pull_choice
   if [[ "$pull_choice" =~ ^[oOyY]$ ]]; then
     git checkout "$branch_to_merge"
     git pull origin "$branch_to_merge"
     git checkout develop
-    echo "✅ Branche synchronisée."
+    echo "Branche synchronisée."
   else
-    echo "❌ Annulation du merge."
+    echo "Annulation du merge."
     exit 1
   fi
 fi
@@ -117,16 +117,16 @@ echo "  • Message court    : $msg_merge"
 echo "  • Message compl.   : $msg_compl"
 read -rp "Confirmer le merge ? (o/n) : " confirm_merge
 if [[ ! "$confirm_merge" =~ ^[oOyY]$ ]]; then
-  echo "❌ Merge annulé."
+  echo "Merge annulé."
   exit 1
 fi
 
-echo -e "\n🔄 Merge $branch_to_merge dans develop..."
+echo -e "\nMerge $branch_to_merge dans develop..."
 git merge --no-ff "origin/$branch_to_merge" -m "v$new_version $msg_merge"
 
 new_line="- $new_version - $branch_to_merge - $msg_merge - $msg_compl"
 echo "$new_line" >> "$CARNET"
-echo "✅ Ajouté dans $CARNET : $new_line"
+echo "Ajouté dans $CARNET : $new_line"
 
 git add "$CARNET"
 git commit -m "Maj carnet de bord v$new_version"
@@ -135,20 +135,20 @@ git push origin develop
 read -rp "Voulez-vous supprimer la branche feature/$branch_to_merge après merge ? (o/n) : " del_choice
 if [[ "$del_choice" =~ ^[oOyY]$ ]]; then
   git push origin --delete "$branch_to_merge"
-  echo "✅ Branche distante $branch_to_merge supprimée."
+  echo "Branche distante $branch_to_merge supprimée."
 fi
 
-echo -e "\n🎉 Merge terminé avec succès !"
-echo "📌 Version : v$new_version"
-echo "📌 Branche mergée : $branch_to_merge"
-[ "$del_choice" = "o" ] && echo "📌 Branche supprimée après merge."
+echo -e "\nMerge terminé avec succès !"
+echo "Version : v$new_version"
+echo "Branche mergée : $branch_to_merge"
+[ "$del_choice" = "o" ] && echo "Branche supprimée après merge."
 
 if git stash list | grep -q "stash auto avant merge $branch_to_merge"; then
   read -rp "Voulez-vous réappliquer vos changements stashed ? (o/n) : " pop_choice
   if [[ "$pop_choice" =~ ^[oOyY]$ ]]; then
     git stash pop
-    echo "✅ Changements restaurés."
+    echo "changements restaurés."
   else
-    echo "ℹ️ Les changements restent dans le stash."
+    echo "Les changements restent dans le stash."
   fi
 fi
